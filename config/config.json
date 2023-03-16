@@ -1,0 +1,26 @@
+{
+    "development": {
+      "username": "root",
+      "password": "tuankhoa2908",
+      "database": "hust",
+      "host": "localhost",
+      "dialect": "mysql"
+      
+    },
+    "test": {
+      "username": "root",
+      "password": "tuankhoa2908",
+      "database": "dbname_dev",
+      "host": "localhost",
+      "dialect": "hust",
+      "operatorsAliases": false
+    },
+    "production": {
+      "username": "root",
+      "password": "tuankhoa2908",
+      "database": "dbname_prod",
+      "host": "localhost",
+      "dialect": "hust",
+      "operatorsAliases": false
+    }
+  }
