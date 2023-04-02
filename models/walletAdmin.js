@@ -11,20 +11,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      typeAdminTransaction: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
       AmountMonet: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
       fromUserId: {
         type: DataTypes.STRING,
-        allowNull: false,
-      },
-      CurrentAdminBalance: {
-        type: DataTypes.INTEGER,
         allowNull: false,
       },
     },

@@ -5,10 +5,9 @@ const user = db.user;
 
 const uuid = require("uuid");
 
-var id = uuid.v4();
-
 module.exports = {
   deposit: async (req, res) => {
+    var id = uuid.v4();
     await listTransaction.create({
       transactionId: id,
       userTransactionId: req.body.userId,
@@ -47,28 +46,28 @@ module.exports = {
       raw: true,
     });
     if (parseInt(req.body.money) > data.currentBalance)
-      res.send("So du tai khoan cua ban khong du");
-    else {
-      await listTransaction.create({
-        transactionId: id,
-        userTransactionId: req.body.userId,
-        typeTransaction: "Withdraw",
-        timeTransaction: req.body.timeTransaction,
-        balanceFluctuations: req.body.money,
-      });
+      return res.send("So du tai khoan cua ban khong du");
 
-      let currentBalance = data.currentBalance - parseInt(req.body.money);
-      await user.update(
-        {
-          currentBalance: currentBalance,
+    await listTransaction.create({
+      transactionId: id,
+      userTransactionId: req.body.userId,
+      typeTransaction: "Withdraw",
+      timeTransaction: req.body.timeTransaction,
+      balanceFluctuations: req.body.money,
+    });
+
+    let currentBalance = data.currentBalance - parseInt(req.body.money);
+    await user.update(
+      {
+        currentBalance: currentBalance,
+      },
+      {
+        where: {
+          userId: req.body.userId,
         },
-        {
-          where: {
-            userId: req.body.userId,
-          },
-        }
-      );
-      res.send(`Rut tien thanh cong, so tien hien tai la : ${currentBalance}`);
-    }
+      }
+    );
+    res.send(`Rut tien thanh cong, so tien hien tai la : ${currentBalance}`);
   },
+  transfer: async (req, res) => {},
 };

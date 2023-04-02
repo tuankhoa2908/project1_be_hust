@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      timeLession: {
+      timeSession: {
         type: DataTypes.STRING,
         allowNull: false,
       },

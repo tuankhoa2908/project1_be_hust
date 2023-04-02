@@ -2,10 +2,11 @@ const db = require("../models/index");
 const profileUser = db.profile_user;
 const uuid = require("uuid");
 
-var id = uuid.v4();
+
 
 module.exports = {
-  updateProfile: async (req, res) => {
+  createProfile: async (req, res) => {
+    var id = uuid.v4();
     console.log(req.body);
     await profileUser.create({
       profileId: id,
@@ -18,5 +19,27 @@ module.exports = {
     });
     res.send("update profile successful");
   },
-  searchProfile: async (req, res) => {},
+  searchProfile: async (req, res) => {
+    await profileUser.findOne({
+      where: {
+        classId: req.body.classId,
+      },
+    });
+  },
+  updateProfile: async (req, res) => {
+    const data = await profileUser.update(
+      {
+        fullnameUser: req.body.fullnameUser,
+        ageUser: req.body.ageUser,
+        genderUser: req.body.genderUser,
+        addressUser: req.body.addressUser,
+        phoneUser: req.body.phoneUser,
+      },
+      {
+        where: {
+          profileId: req.body.profileId,
+        },
+      }
+    );
+  },
 };

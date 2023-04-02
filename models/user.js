@@ -46,6 +46,7 @@ module.exports = (sequelize, DataTypes) => {
     });
     user.hasMany(db.list_class, {
       foreignKey: "classOwner_user_userId",
+      foreignKey: "tutorAccept_user_userId",
     });
     user.hasMany(db.list_offer, {
       foreignKey: "offer_user_tutorId",

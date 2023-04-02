@@ -20,10 +20,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      timeOffer: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
+      // timeOffer: {
+      //   type: DataTypes.STRING,
+      //   allowNull: false,
+      // },
       result: {
         type: DataTypes.STRING,
         defaultValue: "waiting",

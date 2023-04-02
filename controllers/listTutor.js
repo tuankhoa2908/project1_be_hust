@@ -21,7 +21,7 @@ module.exports = {
           userProfileId: req.body.userId,
         },
       }
-    );
+    );    
   },
   listTutor: async (req, res) => {
     const data = await listTutor.findAll();
