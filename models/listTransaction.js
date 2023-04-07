@@ -32,7 +32,10 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   listTransaction.associate = (db) => {
-    listTransaction.belongsTo(db.user);
+    listTransaction.belongsTo(db.user,
+      {
+        foreignKey: "userTransactionId",
+      });
   };
 
   return listTransaction;

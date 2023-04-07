@@ -30,7 +30,9 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
   listTutor.associate = (db) => {
-    listTutor.belongsTo(db.user);
+    listTutor.belongsTo(db.user, {
+      foreignKey: "tutorId",
+    });
   };
   return listTutor;
 };

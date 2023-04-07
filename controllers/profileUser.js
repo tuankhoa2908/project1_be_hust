@@ -1,8 +1,7 @@
 const db = require("../models/index");
 const profileUser = db.profile_user;
+const user = db.user;
 const uuid = require("uuid");
-
-
 
 module.exports = {
   createProfile: async (req, res) => {
@@ -21,11 +20,21 @@ module.exports = {
   },
   searchProfile: async (req, res) => {
     const data_user = await profileUser.findOne({
+      attributes: [
+        "fullnameUser",
+        "ageUser",
+        "genderUser",
+        "addressUser",
+        "phoneUser",
+      ],
       where: {
-        classId: req.body.classId,
+        userProfileId: req.body.userProfileId,
       },
+      include: [{ model: user, attributes: ["email"] }],
       raw: true,
     });
+    if (data_user === null)
+      return res.send("Không tìm thấy thông tin người dùng. ");
     res.send(data_user);
   },
   updateProfile: async (req, res) => {

@@ -63,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
       tutorAcceptId: {
         type: DataTypes.STRING,
         allowNull: true,
-      }
+      },
     },
     {
       sequelize,
@@ -75,7 +75,10 @@ module.exports = (sequelize, DataTypes) => {
     listClass.hasMany(models.list_offer, {
       foreignKey: "offer_class_classId",
     });
-    listClass.belongsTo(models.user);
+    listClass.belongsTo(models.user, {
+      foreignKey: "classOwnerId",
+      foreignKey: "tutorAcceptId",
+    });
   };
 
   return listClass;

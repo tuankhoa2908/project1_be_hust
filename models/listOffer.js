@@ -11,11 +11,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      classOwnerOfferId:{
+      classOwnerOfferId: {
         type: DataTypes.STRING,
         allowNull: false,
-      }
-      ,
+      },
       tutorOfferId: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -41,8 +40,13 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
   listOffer.associate = (db) => {
-    listOffer.belongsTo(db.user);
-    listOffer.belongsTo(db.list_class);
+    listOffer.belongsTo(db.user, {
+      foreignKey: "classOwnerOfferId",
+      foreignKey: "tutorOfferId",
+    });
+    listOffer.belongsTo(db.list_class, {
+      foreignKey: "classOfferId",
+    });
   };
   return listOffer;
 };
