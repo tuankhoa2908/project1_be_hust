@@ -5,26 +5,25 @@ const bcrypt = require("bcrypt");
 const uuid = require("uuid");
 const listClass = require("./listClass");
 
-var idRandom = uuid.v4();
-
 module.exports = {
   create: async (req, res) => {
-    const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
-    const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-    // var result = {};
-    var checkUser = USER_REGEX.test(req.body.username);
-    var checkPassword = PWD_REGEX.test(req.body.password);
-    if (checkUser === false)
-      return res.send("hange your account according to the given format");
-    if (checkPassword === false)
-      res.send("Change your password according to the given format ");
+    var idRandom = uuid.v4();
+    // const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
+    // const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+    // // var result = {};
+    // var checkUser = USER_REGEX.test(req.body.username);
+    // var checkPassword = PWD_REGEX.test(req.body.password);
+    // if (checkUser === false)
+    //   return res.send("hange your account according to the given format");
+    // if (checkPassword === false)
+    //   res.send("Change your password according to the given format ");
     await user.create({
       userId: idRandom,
       username: req.body.username,
       password: bcrypt.hashSync(req.body.password, 10),
       email: req.body.email,
     });
-    res.send("ok");
+    res.send("Create Your Account Successful");
   },
   login: async (req, res) => {
     const data = await user.findOne({

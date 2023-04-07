@@ -21,10 +21,11 @@ module.exports = {
           userProfileId: req.body.userId,
         },
       }
-    );    
+    );
   },
   listTutor: async (req, res) => {
     const data = await listTutor.findAll();
     res.send(data);
   },
+  findTutor: async (req, res) => {},
 };

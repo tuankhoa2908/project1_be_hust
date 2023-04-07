@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      AmountMonet: {
+      amountMoney: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },

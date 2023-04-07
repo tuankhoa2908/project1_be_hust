@@ -69,5 +69,7 @@ module.exports = {
     );
     res.send(`Rut tien thanh cong, so tien hien tai la : ${currentBalance}`);
   },
-  transfer: async (req, res) => {},
+  transfer: async (req, res) => {
+    res.send("NOTHING");
+  },
 };

@@ -18,7 +18,15 @@ module.exports = {
       },
       raw: true,
     });
-    paymentPlatform = parseInt(req.body.salaryPerMonth) * 0.5;
+    const infoClass = await listClass.findOne({
+      attributes: ["salaryPerMonth", "classOwnerId"],
+      where: {
+        classId: req.body.classOfferId,
+      },
+      raw: true,
+    });
+    paymentPlatform = infoClass.salaryPerMonth * 0.5;
+    console.log(infoClass.salaryPerMonth);
     if (money.currentBalance < paymentPlatform)
       return res.send(
         "Vui lòng nạp thêm tiền để thanh toán tiền cọc nhận lớp (50% số tiền nhận trong một tháng)"
@@ -37,15 +45,18 @@ module.exports = {
       offerId: idOffer,
       classOfferId: req.body.classOfferId,
       tutorOfferId: req.body.tutorOfferId,
-      salaryPerMonth: req.body.salaryPerMonth,
+      classOwnerOfferId: infoClass.classOwnerId,
+      salaryPerMonth: infoClass.salaryPerMonth,
     });
     await walletAdmin.create({
       transactionAdminId: idWalletAdmin,
-      timeAdminTransaction: req.body.timeAdminTransaction,
-      AmountMoney: paymentPlatform,
+      timeAdminTransaction: Date.now(),
+      amountMoney: paymentPlatform,
       fromUserId: req.body.tutorOfferId,
     }),
-      res.send("Create Offer Successful ");
+      res.send(
+        "Nhận lớp thành công, chờ chủ sở hữu xác nhận, bạn sẽ được hoàn lại tiền cọc nếu người đăng từ chối"
+      );
   },
   showMyListOffer: async (req, res) => {
     const listOffer = await listClass.findAll({
@@ -66,11 +77,11 @@ module.exports = {
     await listClass.update(
       {
         statusClass: "Accepted Class",
+        tutorAcceptId: req.body.tutorAcceptedId,
       },
       {
         where: {
           classId: req.body.classOfferId,
-          tutorAcceptedId: req.body.tutorAcceptedId,
         },
       }
     );
@@ -81,6 +92,7 @@ module.exports = {
     });
     datauser.map(async (element) => {
       let x = await user.findOne({
+        attributes: ["currentBalance"],
         where: {
           userId: element.tutorOfferId,
         },
@@ -88,7 +100,7 @@ module.exports = {
       if (req.body.tutorAcceptedId != element.tutorOfferId) {
         await user.update(
           {
-            currentBalance: x + element.salaryPerMonth * 0.4,
+            currentBalance: x.currentBalance + element.salaryPerMonth * 0.5,
           },
           {
             where: {
@@ -106,15 +118,26 @@ module.exports = {
     res.send(`Has accepted a tutor with ID ${req.body.tutorAcceptedId}`);
   },
   deniedOffer: async (req, res) => {
+    const data_offer = await listOffer.findOne({
+      attributes: ["tutorOfferId", "salaryPerMonth"],
+      where: {
+        offerId: req.body.offerId,
+      },
+    });
+    const data_user = await user.findOne({
+      attributes: ["currentBalance"],
+      where: {
+        userId: data_offer.tutorOfferId,
+      },
+    });
     await user.update(
       {
-        currentBalance: Sequelize.literal(
-          "currentBalance + salaryPerMonth * 0.5"
-        ),
+        currentBalance:
+          data_user.currentBalance + data_offer.salaryPerMonth * 0.5,
       },
       {
         where: {
-          userId: req.body.tutorId,
+          userId: data_offer.tutorOfferId,
         },
       }
     );
@@ -123,5 +146,8 @@ module.exports = {
         offerId: req.body.offerId,
       },
     });
+    res.send(
+      "Đã hủy lời đề nghị của bạn, kiểm tra số dư trong tài khoản sau khi hoàn trả tiền cọc"
+    );
   },
 };

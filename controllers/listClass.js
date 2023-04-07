@@ -1,12 +1,14 @@
 const db = require("../models/index");
 const listClass = db.list_class;
 const user = db.user;
+const walletAdmin = db.wallet_admin;
 
 const uuid = require("uuid");
 
 module.exports = {
   createClass: async (req, res) => {
     let id = uuid.v4();
+    let id2 = uuid.v4();
     //tra cứu số dư trong ví người dùng đăng kí lớp 
     const userBalance = await user.findOne({
       attributes: ["currentBalance"],
@@ -15,6 +17,7 @@ module.exports = {
       },
       raw: true,
     });
+    console.log(userBalance);
     if (userBalance.currentBalance < 50000)
       return res.send(
         "Tài khoản của bạn không đủ tiền để trả phí đặt lớp (50.000 VND)"
@@ -29,6 +32,13 @@ module.exports = {
         },
       }
     );
+    await walletAdmin.create({
+      transactionAdminId: id2 ,
+      timeAdminTransaction:  Date.now(),
+      amountMoney: 50000,
+      fromUserId: req.body.classOwnerId,
+    }
+    )
     await listClass.create({
       classId: id,
       classOwnerId: req.body.classOwnerId,

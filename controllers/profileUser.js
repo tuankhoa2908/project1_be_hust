@@ -20,11 +20,13 @@ module.exports = {
     res.send("update profile successful");
   },
   searchProfile: async (req, res) => {
-    await profileUser.findOne({
+    const data_user = await profileUser.findOne({
       where: {
         classId: req.body.classId,
       },
+      raw: true,
     });
+    res.send(data_user);
   },
   updateProfile: async (req, res) => {
     const data = await profileUser.update(
